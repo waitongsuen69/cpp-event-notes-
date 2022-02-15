@@ -6,12 +6,12 @@
 
 using namespace std;
 
-Object::Object(string a,time_t t,string b,string c){
+Object::Object(string a,time_t t,string b,string c,bool d){
     events = a;
     time = t;
     person  =b;
     description = c;
-    done = false;
+    done = d;
 }
 
 void Object::show(){
@@ -23,7 +23,7 @@ void Object::show(){
     }else{
         state = "uncomplete";
     }
-    cout<< BOLDGREEN << events << "("<<state<<")" << RESET<<endl;
+    cout<< BOLDGREEN << events << RESET<< "("<<state<<")"<<endl;
     cout<<"Time:"<<endl;
     cout<< BOLDGREEN <<  asctime(gmtime(&time)) << RESET;
     cout<<"Person:"<<endl;

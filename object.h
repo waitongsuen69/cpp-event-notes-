@@ -7,7 +7,8 @@
 using namespace std;
 class Object{
 public:
-    Object(string a,time_t t,string b,string c);
+    
+    Object(string a,time_t t,string b,string c,bool d );
     void show();
     ~Object();
 
