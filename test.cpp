@@ -70,6 +70,7 @@ void data_write_in(vector<Object> data_list){
     }
     file.close();
 }
+
 vector<Object> get_data(){
     vector<Object> list;
     string line;
@@ -149,8 +150,48 @@ int user_choose(){
     return 0;
 }
 
+//  multiple("1: Drop new events.");
+string force_enter(){
+    string enter;
+    int count = 0;
+    while(enter.empty()){
+        if(count != 0){
+            cout<<RED<<"Invalid input!!! Write something!!!"<<RESET<<endl;
+        }
+        getline(cin, enter);
+        count++;
+    }
+    return enter;
+}
+
+Object add_event(){
+    string a,b,c,date;
+    cout<<YELLOW<<"Please enter the name of the event."<<RESET<<endl;
+    a = force_enter();
+    cout<<YELLOW<<"Please enter the person for this event."<<RESET<<endl;
+    b = force_enter();
+    cout<<YELLOW<<"Please enter the date of the event."<<RESET<<endl;
+    getline(cin,date);
+    cout<<YELLOW<<"Please enter any description."<<RESET<<endl;
+    getline(cin,c);
+    time_t t = time(NULL);
+    bool d = false;
+    // Object the_event = Object(a,t,b,c,d);
+    return Object(a,t,b,c,d);
+}
+//     multiple("2: Check all events:");
+//     multiple("3: Search event:");
+
+
 int main(){
     int choose = user_choose();
+    while (choose != 4){
+        if(choose == 1){
+            cout<<"Now you are in:"<< BOLDBLUE << "Drop new events"<<RESET<<endl ;
+        }
+        choose = user_choose();
+    }
+    cout<<BOLDBLUE<<"Have a good day bra!"<<RESET << endl;
     // vector<Object> list = get_data();
     // string a = "events name";
     // time_t t = time(NULL);
