@@ -4,21 +4,3 @@ karen
 this is the war between man and karen
 0
 
-events name
-1644874665
-karen
-this is the war between man and karen
-0
-
-events name
-1644874682
-karen
-this is the war between man and karen
-0
-
-events name
-1644874682
-karen
-this is the war between man and karen
-0
-

@@ -1,9 +1,52 @@
 #include<iostream>
+#include<stdlib.h>
 #include<time.h>
 #include<fstream>
 #include<vector>
 #include"object.h"
 #include<string>
+
+#include <regex>
+ 
+/**
+ * Use namespace std
+ */
+using namespace std;
+ 
+/**
+ * Colors
+ */
+ 
+#define RESET   "\033[0m"
+#define BLACK   "\033[30m"      /* Black */
+#define RED     "\033[31m"      /* Red */
+#define GREEN   "\033[32m"      /* Green */
+#define YELLOW  "\033[33m"      /* Yellow */
+#define BLUE    "\033[34m"      /* Blue */
+#define MAGENTA "\033[35m"      /* Magenta */
+#define CYAN    "\033[36m"      /* Cyan */
+#define WHITE   "\033[37m"      /* White */
+#define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
+#define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
+#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
+#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
+#define BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
+#define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
+#define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
+#define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
+ 
+/**
+ * I/O
+ */
+#define output(value) cout << value << endl
+#define error(errorString) cout << RED << errorString << RESET << endl
+#define info(infoString) cout << CYAN << infoString << RESET << endl
+#define success(successString) cout << GREEN << successString << RESET << endl
+#define multiple(multiplestring) cout<< MAGENTA << multiplestring << RESET << endl
+
+//color coding
+
+
 
 using namespace std;
 
@@ -48,22 +91,75 @@ vector<Object> get_data(){
 
 
         }
+        file.close();
     }
     return list;
 }
 
+int user_choose(){
+    // system("clear");
+    cout<<BOLDBLUE << "Welcome to the cpp events notes!!!"<<RESET<<endl;
+    cout<<"What you want to drop down today mate!"<<endl;
+    multiple("1: Drop new events.");
+    multiple("2: Check all events:");
+    multiple("3: Search event:");
+    multiple("4: quit system");
+    string input;
+    cin>> input;
+
+    while(input != ""){
+        while(input.length() > 1 || (input[0] < 49 && input[0] > 54)   ){
+                system("clear");    
+                error("INVALID INPUT!");
+                cout<<"Example:"<<endl<<"Please enter [4] and press enter if you want to quit."<<endl;
+                cout<<"What you want to drop down today mate!"<<endl;
+                multiple("1: Drop new events.");
+                multiple("2: Check all events:");
+                multiple("3: Search event:");
+                multiple("4: quit system");
+                cin>>input;
+
+        }
+        int user_input = stoi(input);
+        switch(user_input){
+            case 1:
+            return 1;
+            break;
+            case 2:
+            return 2;
+            break;
+            case 3:
+            return 3;
+            break;
+            case 4:
+            return 4;
+            break;
+            default:
+                system("clear");
+                error("INVALID INPUT!");
+                cout<<"Example:"<<endl<<"Please enter [4] and press enter if you want to quit."<<endl;
+                cout<<"What you want to drop down today mate!"<<endl;
+                multiple("1: Drop new events.");
+                multiple("2: Check all events:");
+                multiple("3: Search event:");
+                multiple("4: quit system");
+                cin>>input;
+        }
+    }
+    return 0;
+}
+
 int main(){
-    vector<Object> list = get_data();
-    // vector<Object> list;
-    string a = "events name";
-    time_t t = time(NULL);
-    string b = "karen";
-    string c = "this is the war between man and karen";
-    bool d = false;
-    Object the_event = Object(a,t,b,c,d);
-    list.push_back(the_event);
-    list.push_back(the_event);
-    the_event.show();
-    data_write_in(list);
+    int choose = user_choose();
+    // vector<Object> list = get_data();
+    // string a = "events name";
+    // time_t t = time(NULL);
+    // string b = "karen";
+    // string c = "this is the war between man and karen";
+    // bool d = false;
+    // Object the_event = Object(a,t,b,c,d);
+    // list.push_back(the_event);
+    // the_event.show();
+    // data_write_in(list);
     return 0;
 }
