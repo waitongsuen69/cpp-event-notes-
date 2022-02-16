@@ -49,7 +49,7 @@ using namespace std;
 #define info(infoString) cout << CYAN << infoString << RESET << endl
 #define success(successString) cout << GREEN << successString << RESET << endl
 #define multiple(multiplestring) cout<< MAGENTA << multiplestring << RESET << endl
-
+#define sys(sysString) cout << BLUE << sysString << RESET << endl
 //color coding
 
 
@@ -170,13 +170,11 @@ int user_choose(){
 //  multiple("1: Drop new events.");
 string force_enter(){
     string enter;
-    int count = 0;
     while(enter.empty()){
-        if(count != 0){
+        getline(cin, enter);
+        if(enter.empty()){
             cout<<RED<<"Invalid input!!! Write something!!!"<<RESET<<endl;
         }
-        getline(cin, enter);
-        count++;
     }
     return enter;
 }
@@ -260,6 +258,39 @@ void show_all_events(vector<Object> list){
 }
 
 //     multiple("3: Search event:");
+// int advancesearch(vector<string> list,string target){
+//     int results=-1, result_near = 0;
+//     for (int i = 0; i < list.size(); i++)
+//     {
+//         int n = list[i].length();
+//         int m = target.length();
+//         int count = 0;
+//         if(target[0] == list[0]){
+//         }
+//     }
+//     return -1;
+// }
+// void event_search(vector<Object> list){
+//     vector<string> event_list;
+//     for(auto name : list){
+//         event_list.push_back(name.events);
+//     }
+// }
+// void person_search(vector<Object> list){
+// }
+// void search_events(vector<Object> list){
+//      system("clear");
+//      sys("1: Search by event name:");
+//      sys("2: Search by person involve:");
+//      sys("0: quit searching");
+//      int choice;
+//      if(choice == 1){
+//          event_search(list);
+//      }else if(choice == 2){
+//          person_search(list);
+//      }
+//     //  sys("3: search by ")
+// }
 
 //      4: edit events
 vector<Object> change_information(vector<Object> list){
@@ -350,32 +381,24 @@ int main(){
             list.push_back(add_event());
             cout<<BOLDGREEN << "Success adding events"<<RESET<<endl;
             list.back().show();
-            cout<<BLUE << "Back to menu in " ;
-            for(int i=5; i>=1 ;i--){
-                cout<<i<<" "<<endl;
-                usleep(1000000);
-            }
-            cout<<RESET<<endl;
-
-
-
         }else if(choose == 2 ){
             //2: Check all events
             cout<<"Now you are in:"<< BOLDBLUE << "Drop new events"<<RESET<<endl ;
             show_all_events(list);
-
-
-        
+        }else if (choose == 3){
+            cout<<"Now you are in:"<< BOLDBLUE << "Search events"<<RESET<<endl ;
+            // search_events(list);     
         }else if (choose == 4){
             //4: edit events
             list = change_information(list);
-        cout<<BLUE << "Back to menu in " ;
-            for(int i=5; i>=1 ;i--){
-                cout<<i<<" "<<endl;
-                usleep(1000000);
-            }
-            cout<<RESET<<endl;
+        
         }
+        cout<<BLUE << "Back to menu in " ;
+        for(int i=5; i>=1 ;i--){
+            cout<<i<<" "<<endl;
+            usleep(1000000);
+        }
+        cout<<RESET<<endl;
         choose = user_choose();
     }
     cout<<BOLDBLUE<<"Have a good day bra!"<<RESET << endl;

@@ -127,11 +127,13 @@ int main () {
   // time_t now = time_enter();
     // cout<<asctime(gmtime(&now));
   // else cout << "Unable to open file"; 
-            cout<<BLUE << "Back to menu in " ;
-            for(int i=5; i>=1 ;i--){
-                cout<<i<<" "<<endl;
-                usleep(1000000);
-            }
-            cout<<RESET<<endl;
+  string a = "12345";
+  cout<<a.length()<<endl;
+            // cout<<BLUE << "Back to menu in " ;
+            // for(int i=5; i>=1 ;i--){
+            //     cout<<i<<" "<<endl;
+            //     usleep(1000000);
+            // }
+            // cout<<RESET<<endl;
   return 0  ;
 }
