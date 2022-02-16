@@ -1,6 +1,12 @@
 #include<iostream>
 #include<stdlib.h>
+
+//for wait
+#include <unistd.h>
+
 #include<time.h>
+#include<ctime>
+
 #include<fstream>
 #include<vector>
 #include"object.h"
@@ -50,6 +56,7 @@ using namespace std;
 
 using namespace std;
 
+//I/O of data from/to txt file 
 void data_write_in(vector<Object> data_list){
     ofstream file;
     file.open("test.txt");
@@ -70,7 +77,6 @@ void data_write_in(vector<Object> data_list){
     }
     file.close();
 }
-
 vector<Object> get_data(){
     vector<Object> list;
     string line;
@@ -97,6 +103,12 @@ vector<Object> get_data(){
     return list;
 }
 
+//user function page
+    // multiple("1: Drop new events.");
+    // multiple("2: Check all events:");
+    // multiple("3: Search event:");
+    // multiple("4: edit events");
+    // multiple("0: quit system");
 int user_choose(){
     // system("clear");
     cout<<BOLDBLUE << "Welcome to the cpp events notes!!!"<<RESET<<endl;
@@ -104,12 +116,13 @@ int user_choose(){
     multiple("1: Drop new events.");
     multiple("2: Check all events:");
     multiple("3: Search event:");
-    multiple("4: quit system");
+    multiple("4: edit events");
+    multiple("0: quit system");
     string input;
     cin>> input;
 
     while(input != ""){
-        while(input.length() > 1 || (input[0] < 49 && input[0] > 54)   ){
+        while(input.length() > 1 || (input[0] < 48 && input[0] > 54)   ){
                 system("clear");    
                 error("INVALID INPUT!");
                 cout<<"Example:"<<endl<<"Please enter [4] and press enter if you want to quit."<<endl;
@@ -117,7 +130,8 @@ int user_choose(){
                 multiple("1: Drop new events.");
                 multiple("2: Check all events:");
                 multiple("3: Search event:");
-                multiple("4: quit system");
+                multiple("4: edit events.");
+                multiple("0: quit system");
                 cin>>input;
 
         }
@@ -135,6 +149,9 @@ int user_choose(){
             case 4:
             return 4;
             break;
+            case 0:
+            return 0;
+            break;
             default:
                 system("clear");
                 error("INVALID INPUT!");
@@ -147,7 +164,7 @@ int user_choose(){
                 cin>>input;
         }
     }
-    return 0;
+    return -1;
 }
 
 //  multiple("1: Drop new events.");
@@ -163,7 +180,37 @@ string force_enter(){
     }
     return enter;
 }
+time_t time_enter(){
+    string input;
+    int count =0;
+    while(input.size() != 16){
+      cout<< YELLOW<<"Please enter your time in format:"<<endl<<"hh:mm/dd/mm/year"<<RESET<<endl;
+      if(count!=0){
+          cout<<RED<<"Invalid input!!! please follow the format!!!"<<RESET<<endl;
+      }
+      getline(cin, input); 
+      count++ ;
+    }
+    int hour,minute,day,month,year;
+    hour = stoi(input.substr(0,2),nullptr,10);
+    minute = stoi(input.substr(3,2),nullptr,10);
+    day =stoi(input.substr(6,2),nullptr,10);
+    month = stoi(input.substr(9,2),nullptr,10);
+    year = stoi(input.substr(12,4),nullptr,10);
+    tm* time_ptr ;
+    time_t result;
+    time(&result);
+    time_ptr = localtime(&result);
+    time_ptr->tm_hour = hour;
+    time_ptr->tm_min = minute;
+    time_ptr->tm_mday = day;
+    time_ptr->tm_mon = month - 1;
+    time_ptr->tm_year = year - 1900;
+    result = mktime(time_ptr);
+    // cout<<asctime(gmtime(&result));
+    return result;
 
+}
 Object add_event(){
     string a,b,c,date;
     cout<<YELLOW<<"Please enter the name of the event."<<RESET<<endl;
@@ -171,36 +218,168 @@ Object add_event(){
     cout<<YELLOW<<"Please enter the person for this event."<<RESET<<endl;
     b = force_enter();
     cout<<YELLOW<<"Please enter the date of the event."<<RESET<<endl;
-    getline(cin,date);
+    time_t t = time_enter();
     cout<<YELLOW<<"Please enter any description."<<RESET<<endl;
     getline(cin,c);
-    time_t t = time(NULL);
     bool d = false;
     // Object the_event = Object(a,t,b,c,d);
     return Object(a,t,b,c,d);
 }
+
 //     multiple("2: Check all events:");
+void show_all_events(vector<Object> list){
+    system("clear");
+    cout<<BOLDBLUE << "Event list:"<<RESET<<endl;
+    cout<<"Number      event name"<<endl;
+    for(int i=0;i<list.size();i++){
+        cout<<BOLDBLUE<<(i+1)<<"           "<<MAGENTA<<list[i].events<<RESET<<endl;
+
+    }
+    cout<<BOLDBLUE<<"Enter the number of events you want to check in detail."<<RESET<<endl;
+    cout<<BLUE<<"[-1] Back to menu."<<RESET<<endl;
+    int ui;//user input
+    cin>>ui;
+    if(ui == -1){
+        return;
+    }else if(ui >0 && ui <= list.size()){
+        system("clear");
+        list[ui-1].show();
+        cout<<BLUE<<"[0] quit event checking             [1] continue check event"<<RESET<<endl;
+        cin>>ui;
+        if(ui == 0){
+            return;
+        } else if (ui == 1){
+            show_all_events(list);
+        }else {
+            cout<<RED<<"INVALID INPUT,QUIT"<<RESET<<endl;
+        }
+    }else{
+        cout<<RED<<"INVALID INPUT,QUIT"<<RESET<<endl;
+    }
+
+}
+
 //     multiple("3: Search event:");
 
+//      4: edit events
+vector<Object> change_information(vector<Object> list){
+    //list out event to pick 
+    system("clear");
+    cout<<BOLDBLUE << "Event list:"<<RESET<<endl;
+    cout<<"Number      event name"<<endl;
+    for(int i=0;i<list.size();i++){
+        cout<<BOLDBLUE<<(i+1)<<"           "<<MAGENTA<<list[i].events<<RESET<<endl;
+
+    }
+    cout<<BOLDBLUE<<"Enter the number of events you want to edit."<<RESET<<endl;
+    cout<<BLUE<<"[-1] Back to menu."<<RESET<<endl;
+    int ui;//user input
+    cin>>ui;
+    if(ui == -1){
+        return list;
+    }else if(ui >0 && ui <= list.size()){
+        system("clear");
+        list[ui-1].show();  //user pick
+    }else {
+        error("INVALID INPUT!");
+        return list;
+    }
+    multiple("1: Change events name");
+    multiple("2: Change events person");
+    multiple("3: Change events description");
+    multiple("4: Change events  statement");
+    multiple("5: Change time");
+    multiple("6: Quit");
+    int choice;
+    cin >> choice;
+    system("clear");
+    switch (choice) {
+        case 1:{
+            cout<<BLUE<<"Current event name :"<<RESET<<list[ui-1].events<<endl;
+            list[ui-1].events_change(force_enter());
+            break;
+        }
+        case 2:{
+            cout<<BLUE<<"Current person :"<<RESET<<list[ui-1].person<<endl;
+            list[ui-1].person_change(force_enter());
+            break;
+        }
+        case 3:{
+            cout<<BLUE<<"Current description :"<<RESET<<list[ui-1].description<<endl;
+            list[ui-1].description_change( force_enter());
+            break;
+        }
+        case 4:{
+            cout<<BLUE<<"Current state :"<<RESET;
+            bool state = list[ui-1].done;
+            if(state){ cout<<"completed"<<endl; 
+            }else {cout<<"not completed"<<endl;}
+            cout<<BLUE<<"1: completed"<<endl<<"0:not completed"<<RESET<<endl;
+            cin>>state;
+            list[ui-1].done_change(state);
+            break;
+        }
+        case 5:{
+            cout<<BLUE<<"Current time :"<<RESET<<endl;
+            time_t t = time_enter();
+            list[ui-1].time_change(t);
+            break;
+        }
+        case 6:{
+            return list;
+            break;
+        }
+    }
+
+
+
+    success("Success editing!!!");
+    list[ui-1].show();
+    return list;
+}
 
 int main(){
+    // int choose = user_choose();
+    vector<Object> list = get_data();
+    // vector<Object> list;
     int choose = user_choose();
-    while (choose != 4){
+    while (choose != 0 && choose !=-1){
         if(choose == 1){
+            //1: Drop new events.
             cout<<"Now you are in:"<< BOLDBLUE << "Drop new events"<<RESET<<endl ;
+            list.push_back(add_event());
+            cout<<BOLDGREEN << "Success adding events"<<RESET<<endl;
+            list.back().show();
+            cout<<BLUE << "Back to menu in " ;
+            for(int i=5; i>=1 ;i--){
+                cout<<i<<" "<<endl;
+                usleep(1000000);
+            }
+            cout<<RESET<<endl;
+
+
+
+        }else if(choose == 2 ){
+            //2: Check all events
+            cout<<"Now you are in:"<< BOLDBLUE << "Drop new events"<<RESET<<endl ;
+            show_all_events(list);
+
+
+        
+        }else if (choose == 4){
+            //4: edit events
+            list = change_information(list);
+        cout<<BLUE << "Back to menu in " ;
+            for(int i=5; i>=1 ;i--){
+                cout<<i<<" "<<endl;
+                usleep(1000000);
+            }
+            cout<<RESET<<endl;
         }
         choose = user_choose();
     }
     cout<<BOLDBLUE<<"Have a good day bra!"<<RESET << endl;
-    // vector<Object> list = get_data();
-    // string a = "events name";
-    // time_t t = time(NULL);
-    // string b = "karen";
-    // string c = "this is the war between man and karen";
-    // bool d = false;
-    // Object the_event = Object(a,t,b,c,d);
-    // list.push_back(the_event);
-    // the_event.show();
-    // data_write_in(list);
+
     return 0;
 }
+

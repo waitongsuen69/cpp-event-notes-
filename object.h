@@ -10,6 +10,11 @@ public:
     
     Object(string a,time_t t,string b,string c,bool d );
     void show();
+    void time_change(time_t n);
+    void events_change(string n);
+    void person_change(string n);
+    void description_change(string n);
+    void done_change(bool n);
     ~Object();
 
     string events;
